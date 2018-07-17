@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+			<!-- res company inherit -->
+            <record model="ir.ui.view" id="company_inherit_form_view">
+                <field name="name">res.company.form.inherit</field>
+                <field name="model">res.company</field>
+                <field name="type">form</field>
+                <field name="inherit_id" ref="base.view_company_form"/>
+                <field name="arch" type="xml">
+                <notebook position="inside">
+	                    <page string='Identifiants administratifs'>
+		                   <group>
+		                    <group>
+		                    	<field name="company_type_id"/>
+		                    	<field name="tele" />
+		                    	<field name="date"/>
+		                    	<field name="rc"/>
+		                    	<field name="itp" />
+		                    </group>
+		                    <group>
+		                    	<field name="capital" />
+		                    	<field name="ifs" />
+		                    	<field name="cnss" />
+		                    	<field name="ice" />
+		                    </group>
+		                   </group>
+	                    </page>  	
+                   </notebook>
+                    
+                </field>
+            </record>
+
+			<!-- product.template pany inherit -->
+            <record model="ir.ui.view" id="product_temp_inherit_form_view">
+                <field name="name">product.template.form.inherit</field>
+                <field name="model">product.template</field>
+                <field name="type">form</field>
+                <field name="inherit_id" ref="product.product_template_form_view"/>
+                <field name="arch" type="xml">      
+	    		<xpath expr="//page[@name='sales']" position="inside">
+	            	<separator string='Identifiants Axo'/>
+	            		<group>
+		                    <group>
+		                    	<field name="internal_category_id"/>
+		                    	<field name="display_type_id" />
+		                    	<field name="city_id"/>
+		                    	<field name="adress"/>
+		                    </group>
+		                    <group>
+		                    	<field name="width" />
+		                    	<field name="height"/>
+		                    	<field name="area"/>
+		                    	<field name="time"/>
+		                    </group>
+		                </group>
+	            
+	            </xpath>
+                </field>
+            </record>
+
+			<!-- sale.order  inherit -->
+            <record model="ir.ui.view" id="sale_order_ax_inherit_form_view">
+                <field name="name">sale.order.axo.form.inherit</field>
+                <field name="model">sale.order</field>
+                <field name="type">form</field>
+                <field name="inherit_id" ref="sale.view_order_form"/>
+                <field name="arch" type="xml">      
+		    		<xpath expr="//field[@name='partner_id']" position="after">
+		            	<field name="compagne"/>
+		            	<field name="annance"/>
+		            	<field name="refrence_id"/>
+		            	<field name="display_id"/>
+		            </xpath>
+                </field>
+            </record>                 
+
+			<!-- sale.order -->
+		    <record model="ir.ui.view" id="sale_axo_sale_order_line">
+		        <field name="name">sale.order.line.form.inherit</field>
+		        <field name="model">sale.order</field>
+		        <field name="inherit_id" ref="sale.view_order_form"/>
+		        <field name="arch" type="xml">
+		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
+		                <field name="adresse"/>
+		                <field name="vailable"/>
+		                <field name="du"/>
+		                <field name="au"/>
+		                <field name="month_nbr"/>
+		            </xpath>
+		           	<xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
+		                <field name="adresse"/>
+		                <field name="vailable"/>
+		                <field name="du"/>
+		                <field name="au"/>
+		                <field name="month_nbr"/>
+		            </xpath>
+
+		          	<xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="replace">
+		                <field name="name" required="0" invisible="1"/>
+		            </xpath>
+		           	<xpath expr="//field[@name='order_line']/form//field[@name='name']" position="replace">
+		                <field name="name" required="0" invisible="1"/>
+		            </xpath>
+		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="replace">
+		                <field name="product_uom_qty" string="Comm. Agence"/>
+		            </xpath>
+		            <xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']" position="replace">
+		                <field name="product_uom_qty" string="Comm. Agence"/>
+		            </xpath>
+		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="replace">
+		                <field name="product_id" string="Code"/>
+		            </xpath>
+		            <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="replace">
+		                <field name="product_id" string="Code"/>
+		            </xpath>
+		            <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="replace">
+		                <field name="price_subtotal" string="PU HT Comm. inclus"/>
+		            </xpath>
+		            <xpath expr="//field[@name='order_line']/form//field[@name='price_subtotal']" position="replace">
+		                <field name="price_subtotal" string="PU HT Comm. inclus"/>
+		            </xpath>		            		            
+		        </field>
+		    </record>
+                                
+</odoo>
