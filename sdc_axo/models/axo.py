@@ -32,9 +32,9 @@ class ProductTemplate(models.Model):
     adress = fields.Char(string='Adresse') 
     city_id = fields.Many2one('res.city',string='Ville') 
     width = fields.Float(string='Largeur') 
-    height = fields.Integer(string='Hauteur')
-    area = fields.Integer(string='Surface')  
-    time = fields.Integer(string='Temps de pose')
+    height = fields.Float(string='Hauteur')
+    area = fields.Float(string='Surface')  
+    time = fields.Float(string='Temps de pose')
 
 
 class ProductInternal(models.Model):
