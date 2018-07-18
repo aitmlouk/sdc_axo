@@ -5,9 +5,9 @@
             model="sale.order"
             string="Offre d'affichage"
             report_type="qweb-pdf"
-            name="sdc_axo.report_template_reg"
-            file="sdc_axo.report_template_reg"
+            name="sdc_axo.report_template_sale_order"
+            file="sdc_axo.report_template_sale_order"
             attachment_use="False"
-            print_report_name="'Offre d'affichage - %s' %(object.name)"
+            print_report_name="'Offre Affichage - %s' %(object.name)"
         />
 </odoo>

@@ -25,7 +25,7 @@
         'views/axo_inherit.xml',
         'data/sequence.xml',
         'report/sale_report.xml',
-        #'report/registration.xml',
+        'report/report.xml',
         #'menu.xml',
     ],
     

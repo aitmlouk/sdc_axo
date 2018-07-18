@@ -69,6 +69,9 @@
 		            	<field name="compagne"/>
 		            	<field name="annance"/>
 		            	<field name="refrence_id"/>
+		            </xpath>
+		            <xpath expr="//field[@name='validity_date']" position="after">
+		            	<field name="periode"/>
 		            	<field name="display_id"/>
 		            </xpath>
                 </field>
@@ -82,6 +85,7 @@
 		        <field name="arch" type="xml">
 		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
 		                <field name="adresse"/>
+		                <field name="dimension"/>
 		                <field name="vailable"/>
 		                <field name="du"/>
 		                <field name="au"/>
@@ -89,6 +93,7 @@
 		            </xpath>
 		           	<xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
 		                <field name="adresse"/>
+		                <field name="dimension"/>
 		                <field name="vailable"/>
 		                <field name="du"/>
 		                <field name="au"/>

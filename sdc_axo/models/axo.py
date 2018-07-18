@@ -59,6 +59,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order' 
     
     compagne = fields.Char(string='Compagne')
+    periode = fields.Char(string='Période demandée')
     annance = fields.Char(string='Annanceur')
     refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
     display_id = fields.Many2one('product.display',string='Choix d\'affichage')
@@ -77,6 +78,7 @@ class SaleOrderLine(models.Model):
     du = fields.Date(string='Du')
     au = fields.Date(string='Au')
     month_nbr = fields.Integer(string='Nbr mois') 
+    dimension = fields.Char(string='Dimension')
     vailable = fields.Date(string='Disponibilité')
     product_uom_qty = fields.Float(string='Comm. Agence', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0.0)
 
