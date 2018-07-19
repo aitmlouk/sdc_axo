@@ -27,7 +27,7 @@ class ResCompanyType(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template' 
     
-    internal_category_id = fields.Many2one('product.internal',string='Catégorie interne')
+    internal_category_id = fields.Many2one('product.internal',string='Catégorie Emplac.')
     display_type_id = fields.Many2one('product.display',string='Type d\'affichage') 
     adress = fields.Char(string='Adresse') 
     city_id = fields.Many2one('res.city',string='Ville') 
@@ -58,9 +58,9 @@ class ResCity(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order' 
     
-    compagne = fields.Char(string='Compagne')
+    compagne = fields.Char(string='Campagne')
     periode = fields.Char(string='Période demandée')
-    annance = fields.Char(string='Annanceur')
+    annance = fields.Char(string='Annonceur')
     refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
     display_id = fields.Many2one('product.display',string='Choix d\'affichage')
    
@@ -73,7 +73,12 @@ class SaleOrderLine(models.Model):
     def _total_compute(self):
         if self.product_uom_qty:
             self.price_subtotal = 1+(self.product_uom_qty/100)*self.price_unit,
-                            
+
+    @api.onchange('product_id')
+    def onchange_product(self):
+        if self.product_id:
+            self.adresse = self.product_id.adress or False
+                                        
     adresse = fields.Char(string='Adresse')
     du = fields.Date(string='Du')
     au = fields.Date(string='Au')

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<!-- Menus -->
+		<menuitem id="axo_conf_menu" parent="sale.menu_sale_config" name="Articles"/>
+			<menuitem id="menu_categ_empl" name="Catégorie Emplac." parent="axo_conf_menu" action="axo_categ_action_view"/>
+			<menuitem id="menu_display_type" name="Type d'affichage" parent="axo_conf_menu" action="axo_display_action_view"/>
+			<menuitem id="menu_city" name="Ville" parent="axo_conf_menu" action="axo_city_action_view"/>						
+</odoo>

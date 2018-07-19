@@ -21,12 +21,12 @@
     'data': [
         #'security/formation.xml',
         #'security/ir.model.access.csv',
-        #'views/formation_views.xml',
+        'views/axo_views.xml',
         'views/axo_inherit.xml',
         'data/sequence.xml',
         'report/sale_report.xml',
         'report/report.xml',
-        #'menu.xml',
+        'menu.xml',
     ],
     
     'css': [
