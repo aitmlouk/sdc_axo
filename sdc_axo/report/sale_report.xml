@@ -26,7 +26,7 @@
 				  	<td ><strong>N° de client : </strong><span t-field="doc.partner_id.name"/></td>
 				  </tr>
 				  <tr>
-				  	<td ><strong>Choix d'affichage : </strong><span t-field="doc.display_id.name"/></td>
+				  	<td ><strong>Choix d'affichage : </strong><span t-field="doc.display"/></td>
 				  	<td >Devis validé jusqu'au : <span t-field="doc.validity_date"/></td>
 				  </tr>
 				  <tr>
