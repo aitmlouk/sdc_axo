@@ -61,7 +61,7 @@
             </record>
 
 			<!-- res.partner inherit -->
-           <!--  <record model="ir.ui.view" id="partner_ste_inherit_form_view">
+            <record model="ir.ui.view" id="partner_ste_inherit_form_view">
                 <field name="name">res.partner.form.inherit.if</field>
                 <field name="model">res.partner</field>
                 <field name="type">form</field>
@@ -83,7 +83,7 @@
 	            	</page>
 	            </xpath>
                 </field>
-            </record>-->
+            </record>
             
 			<!-- sale.order  inherit -->
             <record model="ir.ui.view" id="sale_order_ax_inherit_form_view">
