@@ -37,27 +37,54 @@
                 <field name="type">form</field>
                 <field name="inherit_id" ref="product.product_template_form_view"/>
                 <field name="arch" type="xml">      
-	    		<xpath expr="//page[@name='sales']" position="inside">
-	            	<separator string='Identifiants Axo'/>
+	    		<xpath expr="//page[@name='sales']" position="after">
+	            	<page string='Caractéristiques'>
 	            		<group>
 		                    <group>
 		                    	<field name="internal_category_id"/>
 		                    	<field name="display_type_id" />
 		                    	<field name="city_id"/>
 		                    	<field name="adress"/>
+		                    	<field name="visibility"/>
 		                    </group>
 		                    <group>
 		                    	<field name="width" />
 		                    	<field name="height"/>
 		                    	<field name="area"/>
 		                    	<field name="time"/>
+		                    	<field name="proximity"/>
 		                    </group>
 		                </group>
-	            
+	            	</page>
 	            </xpath>
                 </field>
             </record>
 
+			<!-- res.partner inherit -->
+            <record model="ir.ui.view" id="partner_ste_inherit_form_view">
+                <field name="name">res.partner.form.inherit.if</field>
+                <field name="model">res.partner</field>
+                <field name="type">form</field>
+                <field name="inherit_id" ref="base.view_partner_form"/>
+                <field name="arch" type="xml">      
+	    		<xpath expr="//page[@name='internal_notes']" position="after" attrs="{'invisible':[('company_type','operator','='person')]}">
+	            	<page string='Caractéristiques'>
+	            		<group>
+		                    <group>
+		                    	<field name="rc"/>
+		                    	<field name="ifs" />
+		                    	<field name="ice"/>
+		                    </group>
+		                    <group>
+		                    	<field name="patente" />
+		                    	<field name="cnss"/>
+		                    </group>
+		                </group>
+	            	</page>
+	            </xpath>
+                </field>
+            </record>
+            
 			<!-- sale.order  inherit -->
             <record model="ir.ui.view" id="sale_order_ax_inherit_form_view">
                 <field name="name">sale.order.axo.form.inherit</field>

@@ -23,7 +23,15 @@ class ResCompanyType(models.Model):
     name = fields.Char(string='Nom')
     code = fields.Char(string='Code')
     
+class Partner(models.Model):
+    _inherit = 'res.partner' 
     
+    rc = fields.Char(string='N°RC')
+    patente = fields.Char(string='Patente')
+    ifs = fields.Char(string='Identifiant Fiscal')
+    cnss = fields.Char(string='CNSS')
+    ice = fields.Char(string='I.C.E')
+        
 class ProductTemplate(models.Model):
     _inherit = 'product.template' 
 
@@ -40,6 +48,8 @@ class ProductTemplate(models.Model):
     height = fields.Float(string='Hauteur')
     area = fields.Float(string='Surface')  
     time = fields.Float(string='Temps de pose')
+    visibility = fields.Char(string='Visibilité')
+    proximity = fields.Char(string='Proximité')
 
 
 class ProductInternal(models.Model):
