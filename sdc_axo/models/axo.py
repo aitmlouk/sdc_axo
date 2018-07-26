@@ -35,17 +35,17 @@ class Partner(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template' 
 
-    @api.onchange('width','height')
+    @api.onchange('largeur','hauteur')
     def _compute_area(self):
-        if self.width and self.height:
-            self.area = self.width * self.height or False
+        if self.largeur and self.hauteur:
+            self.area = self.largeur * self.hauteur or False
                 
     internal_category_id = fields.Many2one('product.internal',string='Catégorie Emplac.')
     display_type_id = fields.Many2one('product.display',string='Type d\'affichage') 
     adress = fields.Char(string='Adresse') 
     city_id = fields.Many2one('res.city',string='Ville') 
-    width = fields.Float(string='Largeur') 
-    height = fields.Float(string='Hauteur')
+    largeur = fields.Float(string='Largeur') 
+    hauteur = fields.Float(string='Hauteur')
     area = fields.Float(string='Surface')  
     time = fields.Float(string='Temps de pose')
     visibility = fields.Char(string='Visibilité')
@@ -94,7 +94,19 @@ class SaleOrder(models.Model):
  
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'   
+            
+    @api.onchange('product_id')
+    def onchange_product(self):
+        if self.product_id:
+            self.adresse = self.product_id.adress or False
+            self.largeur = self.product_id.largeur or False
+            self.hauteur = self.product_id.hauteur or False
+            self.area = self.product_id.area or False
 
+    @api.onchange('largeur','hauteur')
+    def _compute_area(self):
+        if self.largeur and self.hauteur:
+            self.area = self.largeur * self.hauteur or False
 
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
@@ -103,32 +115,21 @@ class SaleOrderLine(models.Model):
         """
         for line in self:
             price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-            taxes = line.tax_id.compute_all(price, line.order_id.currency_id, line.product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
+            product_uom_qty =(1+(line.product_uom_qty/100))
+            taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
             line.update({
                 'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
                 'price_total': taxes['total_included'],
-                'price_subtotal': line.price_unit*(1+(line.product_uom_qty/100)),
+                'price_subtotal': taxes['total_excluded'],
             })
-            
-    @api.onchange('product_id')
-    def onchange_product(self):
-        if self.product_id:
-            self.adresse = self.product_id.adress or False
-            self.width = self.product_id.width or False
-            self.height = self.product_id.height or False
-            self.area = self.product_id.area or False
 
-    @api.onchange('width','height')
-    def _compute_area(self):
-        if self.width and self.height:
-            self.area = self.width * self.height or False
-                                                    
+                                                                   
     adresse = fields.Char(string='Adresse')
     du = fields.Date(string='Du')
     au = fields.Date(string='Au')
     month_nbr = fields.Integer(string='Nbr mois') 
-    width = fields.Float(string='Largeur') 
-    height = fields.Float(string='Hauteur')
+    largeur = fields.Float(string='Largeur') 
+    hauteur = fields.Float(string='Hauteur')
     area = fields.Float(string='Surface')  
     dimension = fields.Char(string='Dimension')
     vailable = fields.Date(string='Disponibilité')
