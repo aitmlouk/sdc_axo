@@ -81,7 +81,7 @@ class SaleOrder(models.Model):
                     if l.product_id.display_type_id.name not in display:           
                         display.append(l.product_id.display_type_id.name) 
                 display_name = ', '.join(str(v) for v in display)
-                self.display = display_name or False
+                self.display = display_name or ''
             return True
                 
                 

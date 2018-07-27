@@ -16,7 +16,7 @@
 				  <tr>
 				    <td ><strong>Contact : </strong></td>
 				    <td ></td>
-				    <td ><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "MM/dd/yyyy"}'/></td>
+				    <td ><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
 				 </tr>
 				  <tr>
 				  	<td >A l'anttention de : <span t-field="doc.partner_id.name"/></td>
@@ -41,7 +41,7 @@
 				</table>
 			</div>
 			
-			<table class="table">
+			<table class="table table-condensed">
 				<tr class="success">
 					<td ><strong>Choix d'affichage : </strong><span t-field="doc.display"/></td>
 	            </tr>
@@ -59,11 +59,10 @@
                             <th>L</th>
                             <th>H</th>
                             <th>Surf</th>
-                            <th>Dimension</th>
                             <th>Disponibilité</th>
-                            <th>Du</th>
-                            <th>Au</th>
-                            <th>Nbre mois</th>
+                            <th class="text-center">Du</th>
+                            <th class="text-center">Au</th>
+                            <th class="text-center">Nbre mois</th>
                             <th class="text-right">Prix unitaire</th>
                             <th class="text-right">Comm. Agence</th>
                             <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
@@ -91,8 +90,14 @@
                                     <td><span t-field="l.product_id.largeur"/></td>
                                     <td><span t-field="l.product_id.hauteur"/></td>
                                     <td><span t-field="l.product_id.area"/></td>
-                                    <td><span t-field="l.dimension"/></td>
-                                    <td><t t-if="not l.vailable">Immédiate</t></td>
+	                                <td><t t-if="not l.vailable">
+										  Immédiate
+										</t>
+										<t t-else="">
+										  <span t-field="l.vailable"/>
+										</t>
+									</td>
+                                
                                     <td><span t-field="l.du"/></td>
                                     <td><span t-field="l.au"/></td>
                                     <td><span t-field="l.month_nbr"/></td>
@@ -120,8 +125,8 @@
 
                             <t t-if="(layout_category_size > 1 or page_size > 1) and layout_category['subtotal']" groups="sale.group_sale_layout">
                                 <tr class="text-right">
-                                    <td colspan="12">
-                                        <strong>Subtotal: </strong>
+                                    <td colspan="14">
+                                        <strong>Sous Total: </strong>
                                         <t t-set="subtotal" t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
                                         <span t-esc="subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
                                     </td>
@@ -139,10 +144,10 @@
 
             <div class="clearfix">
                 <div class="row" name="total">
-                    <div class="col-xs-4 pull-right">
+                    <div class="col-sm-3 pull-right">
                         <table class="table table-condensed" style="min-width: 200px;max-width: 350px;">
                             <tr class="border-black" style="border-bottom:1px solid #dddddd;">
-                                <td><strong>Subtotal</strong></td>
+                                <td><strong>Sous total</strong></td>
                                 <td class="text-right">
                                     <span t-field="doc.amount_untaxed"
                                         t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
