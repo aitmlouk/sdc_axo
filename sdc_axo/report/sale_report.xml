@@ -98,9 +98,9 @@
 										</t>
 									</td>
                                 
-                                    <td><span t-field="l.du"/></td>
-                                    <td><span t-field="l.au"/></td>
-                                    <td><span t-field="l.month_nbr"/></td>
+                                    <td class="text-center"><span t-field="l.du"/></td>
+                                    <td class="text-center"><span t-field="l.au"/></td>
+                                    <td class="text-center"><span t-field="l.month_nbr"/></td>
                                     <td class="text-right">
                                         <span t-field="l.price_unit"/>
                                     </td>
@@ -144,7 +144,7 @@
 
             <div class="clearfix">
                 <div class="row" name="total">
-                    <div class="col-sm-3 pull-right">
+                    <div class="col-xs-6 pull-right">
                         <table class="table table-condensed" style="min-width: 200px;max-width: 350px;">
                             <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                 <td><strong>Sous total</strong></td>
