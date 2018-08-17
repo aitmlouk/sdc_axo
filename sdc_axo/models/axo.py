@@ -114,15 +114,26 @@ class SaleOrderLine(models.Model):
         Compute the amounts of the SO line.
         """
         for line in self:
-            price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-            product_uom_qty =(1+(line.product_uom_qty/100))
-            taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
-            line.update({
-                'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
-                'price_total': taxes['total_included'],
-                'price_subtotal': taxes['total_excluded'],
-            })
-
+            if line.order_id.refrence_id =='print':
+                print('reimpression----------------------')
+                price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+                product_uom_qty =line.area * (1+(line.product_uom_qty/100))
+                taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
+                line.update({
+                    'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                    'price_total': taxes['total_included'],
+                    'price_subtotal': taxes['total_excluded'],
+                })
+            else:
+                
+                price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+                product_uom_qty =(1+(line.product_uom_qty/100))
+                taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
+                line.update({
+                    'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                    'price_total': taxes['total_included'],
+                    'price_subtotal': taxes['total_excluded'],
+                })
                                                                    
     adresse = fields.Char(string='Adresse')
     du = fields.Date(string='Du')
@@ -133,9 +144,27 @@ class SaleOrderLine(models.Model):
     area = fields.Float(string='Surface')  
     dimension = fields.Char(string='Dimension')
     vailable = fields.Date(string='Disponibilité')
-    product_uom_qty = fields.Float(string='Comm. Agence', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0.0)
+    product_uom_qty = fields.Integer(string='Comm. Agence %', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0)
 
     
+class AccountInvoice(models.Model):
+    _inherit = 'account.invoice' 
+                             
+    modalites = fields.One2many('modalite.line','invoice_id',string='Campagne')
+    modalite_id = fields.Many2one('modalite.modalite',string='Modalité de paiement')
+
+class ModalitePai(models.Model):
+    _name = 'modalite.modalite' 
+
+    name = fields.Char(string='Nom')
+    code = fields.Char(string='Code')
+
+class Modalites(models.Model):
+    _name = 'modalite.line' 
+                             
+    mode_id = fields.Char(string='Mode de règlement')
+    percent = fields.Integer(string='%')
+    echeance = fields.Date(string='échéance')
+    invoice_id = fields.Many2one('account.invoice',string='échéance')
     
-    
-    
+        

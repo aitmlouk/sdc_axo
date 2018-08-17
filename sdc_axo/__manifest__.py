@@ -16,16 +16,16 @@
             - model2
             - model3
     """,
-    'depends': ['base','mail','sale'],
+    'depends': ['base','mail','sale','account'],
     'summary': 'sale, purchase',
     'data': [
-        #'security/formation.xml',
-        #'security/ir.model.access.csv',
         'views/axo_views.xml',
         'views/axo_inherit.xml',
         'data/sequence.xml',
         'report/sale_report.xml',
         'report/report.xml',
+        'report/sale_report_print_comm.xml',
+        'report/sale_report_print.xml',
         'menu.xml',
     ],
     

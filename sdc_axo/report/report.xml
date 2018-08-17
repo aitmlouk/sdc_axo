@@ -10,4 +10,24 @@
             attachment_use="False"
             print_report_name="'Offre Affichage - %s' %(object.name)"
         />
+        <report 
+            id="report_sale_order_print_axo"
+            model="sale.order"
+            string="Offre de réimpression"
+            report_type="qweb-pdf"
+            name="sdc_axo.report_template_sale_order_print"
+            file="sdc_axo.report_template_sale_order_print"
+            attachment_use="False"
+            print_report_name="'Offre de réimpression - %s' %(object.name)"
+        />
+        <report 
+            id="report_sale_order_print_nocomm_axo"
+            model="sale.order"
+            string="Offre de réimpression sans comm. ag."
+            report_type="qweb-pdf"
+            name="sdc_axo.report_template_sale_order_print_nocomm"
+            file="sdc_axo.report_template_sale_order_print_nocomm"
+            attachment_use="False"
+            print_report_name="'Offre de réimpression sans comm. ag. - %s' %(object.name)"
+        />
 </odoo>

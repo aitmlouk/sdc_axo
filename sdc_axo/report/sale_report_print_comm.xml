@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<template id="report_template_sale_order">
+<template id="report_template_sale_order_print_nocomm">
     <t t-call="web.external_layout">
         <t t-foreach="docs" t-as="doc">
         <div class="page">
@@ -13,7 +13,7 @@
 				        </style>
 				
 				<div class="col-xs-6 pull-right">
-        			<strong><h3>Offre d'affichage</h3></strong>
+        			<strong><h3>Offre de réimpression</h3></strong>
         		</div>
         		
 				<table class="table borderless">
@@ -35,7 +35,7 @@
 				  <tr>
 				  	<td >Campagne : <span t-field="doc.compagne"/></td>
 				  	<td ></td>
-				  	<td >Période demandée : <span t-field="doc.periode"/></td>
+				  	<td></td>
 				  </tr>
 				</table>
 			</div>
@@ -57,14 +57,9 @@
                             <th>L</th>
                             <th>H</th>
                             <th>Surf</th>
-                            <th>Disponibilité</th>
-                            <th class="text-center">Du</th>
-                            <th class="text-center">Au</th>
-                            <th class="text-center">Nbre mois</th>
                             <th class="text-right">Prix unitaire</th>
-                            <th class="text-right">Comm. Agence</th>
                             <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
-                            <th class="text-right" groups="sale.group_show_price_subtotal">PU HT comm. incluse</th>
+                            <th class="text-right" groups="sale.group_show_price_subtotal">Total HT</th>
                             <th class="text-right price_tax_included" groups="sale.group_show_price_total">PU HT Comm</th>
                         </tr>
                    </thead>
@@ -87,24 +82,8 @@
                                     <td><span t-field="l.product_id.largeur"/></td>
                                     <td><span t-field="l.product_id.hauteur"/></td>
                                     <td><span t-field="l.product_id.area"/></td>
-	                                <td><t t-if="not l.vailable">
-										  Immédiate
-										</t>
-										<t t-else="">
-										  <span t-field="l.vailable"/>
-										</t>
-									</td>
-                                
-                                    <td class="text-center"><span t-field="l.du"/></td>
-                                    <td class="text-center"><span t-field="l.au"/></td>
-                                    <td class="text-center"><span t-field="l.month_nbr"/></td>
                                     <td class="text-right">
                                         <span t-field="l.price_unit"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <!-- <span t-esc="'%.2f'% l.product_uom_qty"/>-->
-                                        <span t-esc="l.product_uom_qty"/>
-                                        <span t-field="l.product_uom" groups="product.group_uom"/>
                                     </td>
 
                                     <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
@@ -173,8 +152,9 @@
             </div>
 
             <strong>Commentaires et instructions spéciales : </strong>
-            <p> Les prix indiqués dans cette offre sont confidentiels.</p>
-            <p>Ils incluent la location des espaces sélectionnés, l'impression, la pose et la dépose d'un visuel par site.</p>
+            <p>Les montants confidentiels indiqués dans cette offre sont nets et non commissionnables.</p>
+            <p>Modalités de règlement : Virement sur réception de la facture.</p>
+            <p>Les montants incluent l'impression, la pose et la dépose d'un visuel par site.</p>
             <p t-field="doc.note" />
             <p t-if="doc.payment_term_id.note">
                 <span t-field="doc.payment_term_id.note"/>

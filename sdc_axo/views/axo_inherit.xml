@@ -157,5 +157,30 @@
 		            </xpath>		            		            
 		        </field>
 		    </record>
-                                
+
+
+			<!-- account.invoice  inherit -->
+            <record model="ir.ui.view" id="account_invoice_ax_inherit_form_view">
+                <field name="name">account.invoice.axo.form.inherit</field>
+                <field name="model">account.invoice</field>
+                <field name="type">form</field>
+                <field name="inherit_id" ref="account.invoice_form"/>
+                <field name="arch" type="xml">      
+		    		<xpath expr="//field[@name='team_id']" position="after">
+		            	<field name="modalite_id"/>
+		            </xpath>
+		            <xpath expr="//page[@name='other_info']" position="before">
+		            	<page string="Modalités règlement">
+		            		<field name="modalites">
+		            			<tree editable="bottom">
+		            				<field name="mode_id"/>
+		            				<field name="percent"/>
+		            				<field name="echeance"/>	
+		            			</tree>		            				            		
+		            		</field>
+		            	</page>
+		            </xpath>
+                </field>
+            </record>   
+                                            
 </odoo>
