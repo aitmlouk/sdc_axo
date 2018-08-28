@@ -90,7 +90,7 @@ class SaleOrder(models.Model):
     annance = fields.Char(string='Annonceur')
     display = fields.Char(compute='_compute_display',string='Choix d\'affichage')
     refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
-   
+  
  
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'   
@@ -162,7 +162,7 @@ class ModalitePai(models.Model):
 class Modalites(models.Model):
     _name = 'modalite.line' 
                              
-    mode_id = fields.Char(string='Mode de règlement')
+    mode_id = fields.Selection([('cheque', 'Chèque')], string= 'Mode de règlement')
     percent = fields.Integer(string='%')
     echeance = fields.Date(string='échéance')
     invoice_id = fields.Many2one('account.invoice',string='échéance')
