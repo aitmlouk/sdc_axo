@@ -20,7 +20,7 @@
 				  <tr>
 				    <td ><strong>Contact : </strong></td>
 				    <td ></td>
-				    <td ><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
+				    <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
 				 </tr>
 				  <tr>
 				  	<td ><strong>A l'anttention de : </strong><span t-field="doc.partner_id"/></td>
@@ -62,7 +62,7 @@
                             <th class="text-center">Au</th>
                             <th class="text-center">Nbre mois</th>
                             <th class="text-center">Prix unitaire</th>
-                            <th class="text-right">Comm. Agence</th>
+                            <th class="text-center">Comm. Agence %</th>
                             <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
                             <th class="text-center" groups="sale.group_show_price_subtotal">PU HT comm. incluse</th>
                             <th class="text-right price_tax_included" groups="sale.group_show_price_total">PU HT Comm</th>

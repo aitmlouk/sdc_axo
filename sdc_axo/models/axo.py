@@ -152,6 +152,11 @@ class AccountInvoice(models.Model):
                              
     modalites = fields.One2many('modalite.line','invoice_id',string='Campagne')
     modalite_id = fields.Many2one('modalite.modalite',string='Modalité de paiement')
+    compagne = fields.Char(string='Campagne')
+    periode = fields.Char(string='Période demandée')
+    annance = fields.Char(string='Annonceur')
+    num_offer = fields.Char(string='Offre N°')
+    refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
 
 class ModalitePai(models.Model):
     _name = 'modalite.modalite' 
@@ -159,10 +164,16 @@ class ModalitePai(models.Model):
     name = fields.Char(string='Nom')
     code = fields.Char(string='Code')
 
+class PaymentMode(models.Model):
+    _name = 'payment.mode' 
+
+    name = fields.Char(string='Nom')
+    code = fields.Char(string='Code')
+    
 class Modalites(models.Model):
     _name = 'modalite.line' 
                              
-    mode_id = fields.Selection([('cheque', 'Chèque')], string= 'Mode de règlement')
+    mode_id = fields.Many2one('payment.mode', string= 'Mode de règlement')
     percent = fields.Integer(string='%')
     echeance = fields.Date(string='échéance')
     invoice_id = fields.Many2one('account.invoice',string='échéance')

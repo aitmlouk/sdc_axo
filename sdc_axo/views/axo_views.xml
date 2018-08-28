@@ -66,5 +66,48 @@
                 <field name="view_type">form</field>
                 <field name="view_mode">tree</field>
             </record>
-                                                           		
+
+            <!--Tree view res.city-->
+            <record model="ir.ui.view" id="axo_modalit_tree_view">
+                <field name="name">modalite.modalite.tree</field>
+                <field name="model">modalite.modalite</field>
+                <field name="type">tree</field>
+                <field name="arch" type="xml">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </tree>
+                </field>
+            </record>
+			
+			<!-- Action view-->
+            <record model="ir.actions.act_window" id="axo_modali_action_view">
+                <field name="name">Modalités du paiement</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">modalite.modalite</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree</field>
+            </record>
+            
+            <!--Tree view res.city-->
+            <record model="ir.ui.view" id="axo_mode_tree_view">
+                <field name="name">payment.mode.tree</field>
+                <field name="model">payment.mode</field>
+                <field name="type">tree</field>
+                <field name="arch" type="xml">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </tree>
+                </field>
+            </record>
+			
+			<!-- Action view-->
+            <record model="ir.actions.act_window" id="axo_mode_action_view">
+                <field name="name">Mode de paiement</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">payment.mode</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree</field>
+            </record>                                                           		
 </odoo>
