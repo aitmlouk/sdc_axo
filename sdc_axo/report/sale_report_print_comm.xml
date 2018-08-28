@@ -57,10 +57,10 @@
                             <th>L</th>
                             <th>H</th>
                             <th>Surf</th>
-                            <th class="text-right">Prix unitaire</th>
+                            <th class="text-center">Prix unitaire</th>
                             <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
                             <th class="text-right" groups="sale.group_show_price_subtotal">Total HT</th>
-                            <th class="text-right price_tax_included" groups="sale.group_show_price_total">PU HT Comm</th>
+                            <th class="text-center price_tax_included" groups="sale.group_show_price_total">PU HT Comm</th>
                         </tr>
                    </thead>
                    <tbody class="sale_tbody">
