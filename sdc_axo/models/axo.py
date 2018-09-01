@@ -72,7 +72,34 @@ class ResCity(models.Model):
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order' 
-       
+
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
+    def compute_amount(self):
+        """
+        Compute the amounts of the SO line.
+        """
+        if self.refrence_id =='print':
+            for line in self.order_line:
+                    print('reimpression----------------------')
+                    price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+                    product_uom_qty =line.area * (1+(line.product_uom_qty/100))
+                    taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
+                    line.update({
+                        'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                        'price_total': taxes['total_included'],
+                        'price_subtotal': taxes['total_excluded'],
+                    })
+        else:
+            for line in self.order_line:     
+                    price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+                    product_uom_qty =(1+(line.product_uom_qty/100))
+                    taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
+                    line.update({
+                        'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                        'price_total': taxes['total_included'],
+                        'price_subtotal': taxes['total_excluded'],
+                    })
+                      
     @api.depends('order_line')
     def _compute_display(self):
             display = []
@@ -108,6 +135,7 @@ class SaleOrderLine(models.Model):
         if self.largeur and self.hauteur:
             self.area = self.largeur * self.hauteur or False
 
+                   
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
         """
@@ -157,6 +185,17 @@ class AccountInvoice(models.Model):
     annance = fields.Char(string='Annonceur')
     num_offer = fields.Char(string='Offre N°')
     refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'   
+                                                                   
+    adresse = fields.Char(string='Adresse')
+    du = fields.Date(string='Du')
+    au = fields.Date(string='Au')
+    largeur = fields.Float(string='Largeur') 
+    hauteur = fields.Float(string='Hauteur')
+    area = fields.Float(string='Surface')  
+
 
 class ModalitePai(models.Model):
     _name = 'modalite.modalite' 

@@ -79,9 +79,9 @@
                                 <tr>
                                     <td><span t-field="l.name"/></td>
                                     <td><span t-field="l.adresse"/></td>
-                                    <td><span t-field="l.product_id.largeur"/></td>
-                                    <td><span t-field="l.product_id.hauteur"/></td>
-                                    <td><span t-field="l.product_id.area"/></td>
+                                    <td><span t-field="l.largeur"/></td>
+                                    <td><span t-field="l.hauteur"/></td>
+                                    <td><span t-field="l.area"/></td>
                                     <td class="text-right">
                                         <span t-field="l.price_unit"/>
                                     </td>

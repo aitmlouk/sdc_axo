@@ -26,6 +26,7 @@
         'report/report.xml',
         'report/sale_report_print_comm.xml',
         'report/sale_report_print.xml',
+        'report/report_invoice.xml',
         'menu.xml',
     ],
     

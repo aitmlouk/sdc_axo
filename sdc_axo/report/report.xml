@@ -30,4 +30,15 @@
             attachment_use="False"
             print_report_name="'Offre de réimpression sans comm. ag. - %s' %(object.name)"
         />
+        
+        <report 
+            id="report_invoice_axo"
+            model="account.invoice"
+            string="Facture Axo"
+            report_type="qweb-pdf"
+            name="sdc_axo.report_template_invoice_axo"
+            file="sdc_axo.report_template_invoice_axo"
+            attachment_use="False"
+            print_report_name="'Facture - %s' %(object.name)"
+        />
 </odoo>

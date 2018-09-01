@@ -62,7 +62,7 @@
                             <th class="text-center">Au</th>
                             <th class="text-center">Nbre mois</th>
                             <th class="text-center">Prix unitaire</th>
-                            <th class="text-center">Comm. Agence %</th>
+                            <th class="text-center">Comm. Agence</th>
                             <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
                             <th class="text-center" groups="sale.group_show_price_subtotal">PU HT comm. incluse</th>
                             <th class="text-right price_tax_included" groups="sale.group_show_price_total">PU HT Comm</th>
@@ -84,9 +84,9 @@
                                 <tr>
                                     <td><span t-field="l.name"/></td>
                                     <td><span t-field="l.adresse"/></td>
-                                    <td><span t-field="l.product_id.largeur"/></td>
-                                    <td><span t-field="l.product_id.hauteur"/></td>
-                                    <td><span t-field="l.product_id.area"/></td>
+                                    <td><span t-field="l.largeur"/></td>
+                                    <td><span t-field="l.hauteur"/></td>
+                                    <td><span t-field="l.area"/></td>
 	                                <td><t t-if="not l.vailable">
 										  Immédiate
 										</t>
@@ -103,7 +103,7 @@
                                     </td>
                                     <td class="text-right">
                                         <!-- <span t-esc="'%.2f'% l.product_uom_qty"/>-->
-                                        <span t-esc="l.product_uom_qty"/>
+                                        <span t-esc="l.product_uom_qty"/>%
                                         <span t-field="l.product_uom" groups="product.group_uom"/>
                                     </td>
 

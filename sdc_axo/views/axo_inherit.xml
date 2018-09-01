@@ -96,6 +96,7 @@
 		            	<field name="compagne"/>
 		            	<field name="annance"/>
 		            	<field name="refrence_id"/>
+		            	<button name="compute_amount" string="M-A-J" type="object" class="oe_highlight"/>
 		            </xpath>
 		            <xpath expr="//field[@name='validity_date']" position="after">
 		            	<field name="periode"/>
@@ -154,7 +155,9 @@
 		            </xpath>
 		            <xpath expr="//field[@name='order_line']/form//field[@name='price_subtotal']" position="replace">
 		                <field name="price_subtotal" string="PU HT Comm. incluse"/>
-		            </xpath>		            		            
+		            </xpath>		
+		           	
+		                        		            
 		        </field>
 		    </record>
 
@@ -168,7 +171,32 @@
                 <field name="arch" type="xml">      
 		    		<xpath expr="//field[@name='team_id']" position="after">
 		            	<field name="modalite_id"/>
+		            	<field name="periode"/>
 		            </xpath>
+		            
+		            <xpath expr="//field[@name='payment_term_id']" position="after">
+		            	<field name="num_offer"/>
+		            	<field name="compagne"/>
+		            	<field name="annance"/>
+		            	<field name="refrence_id"/>
+		            </xpath>
+		            
+		         	<xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='product_id']" position="after">
+		                <field name="adresse"/>
+		                <field name="largeur"/>
+		                <field name="hauteur"/>
+		                <field name="area"/>
+		                <field name="du"/>
+		                <field name="au"/>
+		            </xpath>
+		            
+		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="replace">
+		                <field name="quantity" string="Comm. Agence"/>
+		            </xpath>
+		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='product_id']" position="replace">
+		                <field name="product_id" string="Code"/>
+		            </xpath>
+		            
 		            <xpath expr="//page[@name='other_info']" position="before">
 		            	<page string="Modalités règlement">
 		            		<field name="modalites">
@@ -182,5 +210,6 @@
 		            </xpath>
                 </field>
             </record>   
-                                            
+  
+                                                      
 </odoo>
