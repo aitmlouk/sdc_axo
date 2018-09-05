@@ -111,14 +111,46 @@ class SaleOrder(models.Model):
                 self.display = display_name or ''
             return True
                 
-                
+                    
     compagne = fields.Char(string='Campagne')
     periode = fields.Char(string='Période demandée')
     annance = fields.Char(string='Annonceur')
     display = fields.Char(compute='_compute_display',string='Choix d\'affichage')
     refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
   
- 
+    @api.multi
+    def _prepare_invoice(self):
+        """
+        Prepare the dict of values to create the new invoice for a sales order. This method may be
+        overridden to implement custom invoice generation (making sure to call super() to establish
+        a clean extension chain).
+        """
+        self.ensure_one()
+        journal_id = self.env['account.invoice'].default_get(['journal_id'])['journal_id']
+        if not journal_id:
+            raise UserError(_('Please define an accounting sales journal for this company.'))
+        invoice_vals = {
+            'name': self.client_order_ref or '',
+            'origin': self.name,
+            'compagne':self.compagne,
+            'num_offer':self.name,
+            'annance':self.annance,
+            'refrence_id':self.refrence_id,
+            'type': 'out_invoice',
+            'account_id': self.partner_invoice_id.property_account_receivable_id.id,
+            'partner_id': self.partner_invoice_id.id,
+            'partner_shipping_id': self.partner_shipping_id.id,
+            'journal_id': journal_id,
+            'currency_id': self.pricelist_id.currency_id.id,
+            'comment': self.note,
+            'payment_term_id': self.payment_term_id.id,
+            'fiscal_position_id': self.fiscal_position_id.id or self.partner_invoice_id.property_account_position_id.id,
+            'company_id': self.company_id.id,
+            'user_id': self.user_id and self.user_id.id,
+            'team_id': self.team_id.id
+        }
+        return invoice_vals
+     
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'   
             
@@ -174,6 +206,46 @@ class SaleOrderLine(models.Model):
     vailable = fields.Date(string='Disponibilité')
     product_uom_qty = fields.Integer(string='Comm. Agence %', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0)
 
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        """
+        Prepare the dict of values to create the new invoice line for a sales order line.
+
+        :param qty: float quantity to invoice
+        """
+        self.ensure_one()
+        res = {}
+        account = self.product_id.property_account_income_id or self.product_id.categ_id.property_account_income_categ_id
+        if not account:
+            raise UserError(_('Please define income account for this product: "%s" (id:%d) - or for its category: "%s".') %
+                (self.product_id.name, self.product_id.id, self.product_id.categ_id.name))
+
+        fpos = self.order_id.fiscal_position_id or self.order_id.partner_id.property_account_position_id
+        if fpos:
+            account = fpos.map_account(account)
+
+        res = {
+            'name': self.name,
+            'sequence': self.sequence,
+            'origin': self.order_id.name,
+            'account_id': account.id,
+            'price_unit': self.price_unit,
+            'quantity': qty,
+            'largeur':self.largeur,
+            'hauteur':self.hauteur,
+            'area':self.area,
+            'du':self.du,
+            'au':self.au,
+            'discount': self.discount,
+            'uom_id': self.product_uom.id,
+            'product_id': self.product_id.id or False,
+            'layout_category_id': self.layout_category_id and self.layout_category_id.id or False,
+            'invoice_line_tax_ids': [(6, 0, self.tax_id.ids)],
+            'account_analytic_id': self.order_id.analytic_account_id.id,
+            'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
+        }
+        return res
+    
     
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice' 
@@ -196,6 +268,31 @@ class AccountInvoiceLine(models.Model):
     hauteur = fields.Float(string='Hauteur')
     area = fields.Float(string='Surface')  
 
+    @api.one
+    @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'quantity',
+        'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
+        'invoice_id.date_invoice')
+    def _compute_price(self):
+        currency = self.invoice_id and self.invoice_id.currency_id or None
+        price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
+        taxes = False
+        if self.invoice_id.refrence_id=='print':
+            qty =self.area *(1+(self.quantity/100))
+            if self.invoice_line_tax_ids:
+                taxes = self.invoice_line_tax_ids.compute_all(price, currency, qty, product=self.product_id, partner=self.invoice_id.partner_id)
+            self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else qty * price
+            self.price_total = taxes['total_included'] if taxes else self.price_subtotal
+        else:
+            qty =(1+(self.quantity/100))
+            if self.invoice_line_tax_ids:
+                taxes = self.invoice_line_tax_ids.compute_all(price, currency, qty, product=self.product_id, partner=self.invoice_id.partner_id)
+            self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else qty * price
+            self.price_total = taxes['total_included'] if taxes else self.price_subtotal
+        if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
+            price_subtotal_signed = self.invoice_id.currency_id.with_context(date=self.invoice_id.date_invoice).compute(price_subtotal_signed, self.invoice_id.company_id.currency_id)
+        sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
+        self.price_subtotal_signed = price_subtotal_signed * sign
+        
 
 class ModalitePai(models.Model):
     _name = 'modalite.modalite' 
