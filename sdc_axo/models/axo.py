@@ -268,7 +268,7 @@ class AccountInvoiceLine(models.Model):
     hauteur = fields.Float(string='Hauteur')
     area = fields.Float(string='Surface')  
 
-    @api.one
+    """@api.one
     @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'quantity',
         'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
         'invoice_id.date_invoice')
@@ -291,7 +291,7 @@ class AccountInvoiceLine(models.Model):
         if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
             price_subtotal_signed = self.invoice_id.currency_id.with_context(date=self.invoice_id.date_invoice).compute(price_subtotal_signed, self.invoice_id.company_id.currency_id)
         sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
-        self.price_subtotal_signed = price_subtotal_signed * sign
+        self.price_subtotal_signed = price_subtotal_signed * sign"""
         
 
 class ModalitePai(models.Model):
