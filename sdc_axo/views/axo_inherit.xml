@@ -190,9 +190,13 @@
 		                <field name="au"/>
 		            </xpath>
 		            
-		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="replace">
-		                <field name="quantity" string="Comm. Agence"/>
+		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="attributes">
+		               <attribute name="invisible">1</attribute>
 		            </xpath>
+		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="after">
+		                <field name="comm_agence" string="Comm. Agence"/>
+		            </xpath>
+		            
 		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='product_id']" position="replace">
 		                <field name="product_id" string="Code"/>
 		            </xpath>

@@ -258,6 +258,24 @@ class AccountInvoice(models.Model):
     num_offer = fields.Char(string='Offre N°')
     refrence_id = fields.Selection([('contract', 'Contrat de prestation'), ('print', 'Réimpression')], string= 'Référence')
 
+    @api.multi
+    def get_taxes_values(self):
+        tax_grouped = {}
+        for line in self.invoice_line_ids:
+            price_unit = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+            product_uom_qty =(1+(line.comm_agence/100))
+            taxes = line.invoice_line_tax_ids.compute_all(price_unit, self.currency_id, product_uom_qty, line.product_id, self.partner_id)['taxes']
+            for tax in taxes:
+                val = self._prepare_tax_line_vals(line, tax)
+                key = self.env['account.tax'].browse(tax['id']).get_grouping_key(val)
+
+                if key not in tax_grouped:
+                    tax_grouped[key] = val
+                else:
+                    tax_grouped[key]['amount'] += val['amount']
+                    tax_grouped[key]['base'] += val['base']
+        return tax_grouped
+    
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'   
                                                                    
@@ -266,9 +284,12 @@ class AccountInvoiceLine(models.Model):
     au = fields.Date(string='Au')
     largeur = fields.Float(string='Largeur') 
     hauteur = fields.Float(string='Hauteur')
-    area = fields.Float(string='Surface')  
-
-    """@api.one
+    area = fields.Float(string='Surface')
+    comm_agence = fields.Integer(string='Comm.Agence')
+    price_subtotal = fields.Monetary(string='Amount',
+        store=True, readonly=True, compute='_compute_subt', help="Total amount without taxes")
+                
+    @api.one
     @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'quantity',
         'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
         'invoice_id.date_invoice')
@@ -276,24 +297,22 @@ class AccountInvoiceLine(models.Model):
         currency = self.invoice_id and self.invoice_id.currency_id or None
         price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
         taxes = False
-        if self.invoice_id.refrence_id=='print':
-            qty =self.area *(1+(self.quantity/100))
-            if self.invoice_line_tax_ids:
-                taxes = self.invoice_line_tax_ids.compute_all(price, currency, qty, product=self.product_id, partner=self.invoice_id.partner_id)
-            self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else qty * price
-            self.price_total = taxes['total_included'] if taxes else self.price_subtotal
-        else:
-            qty =(1+(self.quantity/100))
-            if self.invoice_line_tax_ids:
-                taxes = self.invoice_line_tax_ids.compute_all(price, currency, qty, product=self.product_id, partner=self.invoice_id.partner_id)
-            self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else qty * price
-            self.price_total = taxes['total_included'] if taxes else self.price_subtotal
+        product_uom_qty =(1+(self.comm_agence/100))
+        if self.invoice_line_tax_ids:
+            taxes = self.invoice_line_tax_ids.compute_all(price, currency, product_uom_qty, product=self.product_id, partner=self.invoice_id.partner_id)
+        self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else product_uom_qty * price
+        self.price_total = taxes['total_included'] if taxes else self.price_subtotal
         if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
             price_subtotal_signed = self.invoice_id.currency_id.with_context(date=self.invoice_id.date_invoice).compute(price_subtotal_signed, self.invoice_id.company_id.currency_id)
         sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
-        self.price_subtotal_signed = price_subtotal_signed * sign"""
-        
+        self.price_subtotal_signed = price_subtotal_signed * sign
 
+    
+    @api.onchange('comm_agence','price_unit')
+    def _compute_subt(self):
+        product_uom_qty =(1+(self.comm_agence/100))
+        self.price_subtotal = product_uom_qty * self.price_unit or False
+                                
 class ModalitePai(models.Model):
     _name = 'modalite.modalite' 
 
