@@ -21,32 +21,47 @@
 					  <tr>
 					    <td ><strong>Facture N° : </strong><span t-field="o.number"/></td>
 					    <td ></td>
-					    <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="o.date_invoice" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
+					     <td ><strong>Societé : </strong><span t-field="o.partner_id"/></td>
+					 </tr>
+					  <tr>
+					  <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="o.date_invoice" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
+					  	<td ></td>
+					  	<td ><strong>Adresse : </strong><span t-field="o.partner_id.street"/></td>
 					 </tr>
 					  <tr>
 					  	<td ><strong>Code de client : </strong><span t-field="o.partner_id.property_account_receivable_id.code"/></td>
 					  	<td ></td>
-					    <td ><strong>Societé : </strong><span t-field="o.partner_id"/></td>
-					 </tr>
+					  	<td ><strong>ICE N°: </strong><span t-field="o.partner_id.ice"/></td>
+					  </tr>
 					  <tr>
 					  	<td ><strong>Offre N° : </strong><span t-field="o.num_offer"/></td>
 					  	<td ></td>
-					  	<td >Adresse : <span t-field="o.partner_id.street"/></td>
+					  	<td ></td>
 					  </tr>
 					  <tr>
-					  	<td >Campagne : <span t-field="o.compagne"/></td>
 					  	<td ></td>
-					  	<td >ICE N°: <span t-field="o.partner_id.ice"/></td>
+					  	<td ></td>
+					  	<td ></td>
 					  </tr>
 					  <tr>
-					  	<td >Référence : <span t-field="o.refrence_id"/></td>
+					  	<td ><strong>Référence : </strong><span t-field="o.refrence_id"/></td>
 					  	<td ></td>
-					  	<td >Annonceur - Campagne : <span t-field="o.compagne"/> + <span t-field="o.annance"/></td>
+					  	<td ></td>
 					  </tr>
 					  <tr>
-					  	<td >Période d'affichage : <span t-field="o.periode"/></td>
+					  	<td><strong>Annonceur - Campagne : </strong><span t-field="o.compagne"/> + <span t-field="o.annance"/></td>
+						  <td ></td>
+						  <td ></td>
+					  </tr>
+					  <tr>
+					  	<td ><strong>Période d'affichage : </strong><span t-field="o.periode"/></td>
 					  	<td ></td>
-					  	<td >Modalité de paiement : <span t-field="o.modalite_id"/></td>
+					  	<td ></td>
+					  </tr>
+					  <tr>
+					  	<td><strong>Modalité de paiement : </strong><span t-field="o.modalite_id"/></td>
+					  <td ></td>
+					  <td ></td>
 					  </tr>
 					</table>
 				</div>
@@ -94,7 +109,7 @@
                                 <td><span t-field="l.au"/></td>
 
                                 <td class="text-right">
-                                    <span t-field="l.price_unit"/>
+                                    <span t-field="l.price_subtotal"/>
                                 </td>
                                 <td class="text-right" id="subtotal">
                                     <span t-field="l.price_subtotal"
