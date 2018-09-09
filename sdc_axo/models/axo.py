@@ -236,6 +236,7 @@ class SaleOrderLine(models.Model):
             'area':self.area,
             'du':self.du,
             'au':self.au,
+            'comm_agence':self.product_uom_qty,
             'discount': self.discount,
             'uom_id': self.product_uom.id,
             'product_id': self.product_id.id or False,
@@ -299,20 +300,38 @@ class AccountInvoiceLine(models.Model):
         taxes = False
         product_uom_qty =(1+(self.comm_agence/100))
         if self.invoice_line_tax_ids:
-            taxes = self.invoice_line_tax_ids.compute_all(price, currency, product_uom_qty, product=self.product_id, partner=self.invoice_id.partner_id)
-        self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else product_uom_qty * price
+            taxes = self.invoice_line_tax_ids.compute_all(price, currency, self.quantity, product=self.product_id, partner=self.invoice_id.partner_id)
+        self.price_subtotal = price_subtotal_signed = taxes['total_excluded'] if taxes else self.quantity * price
         self.price_total = taxes['total_included'] if taxes else self.price_subtotal
         if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
             price_subtotal_signed = self.invoice_id.currency_id.with_context(date=self.invoice_id.date_invoice).compute(price_subtotal_signed, self.invoice_id.company_id.currency_id)
         sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
         self.price_subtotal_signed = price_subtotal_signed * sign
 
-    
-    @api.onchange('comm_agence','price_unit')
+    @api.one
+    @api.depends('comm_agence','price_unit')
     def _compute_subt(self):
-        product_uom_qty =(1+(self.comm_agence/100))
-        self.price_subtotal = product_uom_qty * self.price_unit or False
-                                
+        if self.invoice_id.refrence_id=='print':  
+            product_uom_qty =self.area * (1+(self.comm_agence/100))
+            self.price_subtotal = product_uom_qty * self.price_unit or False
+        else:
+            product_uom_qty =(1+(self.comm_agence/100))
+            self.price_subtotal = product_uom_qty * self.price_unit or False
+
+
+    @api.onchange('product_id')
+    def onchange_product(self):
+        if self.product_id:
+            self.adresse = self.product_id.adress or False
+            self.largeur = self.product_id.largeur or False
+            self.hauteur = self.product_id.hauteur or False
+            self.area = self.product_id.area or False
+
+    @api.onchange('largeur','hauteur')
+    def _compute_area(self):
+        if self.largeur and self.hauteur:
+            self.area = self.largeur * self.hauteur or False
+                                            
 class ModalitePai(models.Model):
     _name = 'modalite.modalite' 
 
@@ -331,6 +350,13 @@ class Modalites(models.Model):
     mode_id = fields.Many2one('payment.mode', string= 'Mode de règlement')
     percent = fields.Integer(string='%')
     echeance = fields.Date(string='échéance')
+    amount = fields.Float(string='Montant')
     invoice_id = fields.Many2one('account.invoice',string='échéance')
-    
+ 
+    @api.onchange('percent','invoice_id.amount_total')
+    def _compute_amount(self):
+        if self.percent:
+            self.amount = (self.percent/100) * self.invoice_id.amount_total or False
+            
+               
         

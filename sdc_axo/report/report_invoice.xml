@@ -19,24 +19,24 @@
 	        		
 					<table class="table borderless">
 					  <tr>
-					    <td ><strong>Facture N° : </strong><span t-field="o.name"/></td>
+					    <td ><strong>Facture N° : </strong><span t-field="o.number"/></td>
 					    <td ></td>
 					    <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="o.date_invoice" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
 					 </tr>
 					  <tr>
 					  	<td ><strong>Code de client : </strong><span t-field="o.partner_id.property_account_receivable_id.code"/></td>
 					  	<td ></td>
-					    <td ><strong>Societé : </strong><span t-field="o.name"/></td>
+					    <td ><strong>Societé : </strong><span t-field="o.partner_id"/></td>
 					 </tr>
 					  <tr>
 					  	<td ><strong>Offre N° : </strong><span t-field="o.num_offer"/></td>
 					  	<td ></td>
-					  	<td >Adresse : <span t-field="o.name"/></td>
+					  	<td >Adresse : <span t-field="o.partner_id.street"/></td>
 					  </tr>
 					  <tr>
-					  	<td >Campagne : <span t-field="o.name"/></td>
+					  	<td >Campagne : <span t-field="o.compagne"/></td>
 					  	<td ></td>
-					  	<td >ICE N°: <span t-field="o.name"/></td>
+					  	<td >ICE N°: <span t-field="o.partner_id.ice"/></td>
 					  </tr>
 					  <tr>
 					  	<td >Référence : <span t-field="o.refrence_id"/></td>
@@ -54,9 +54,12 @@
                     <!-- Is there a discount on at least one line? -->
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
 
-                    <table class="table table-condensed" name="invoice_line_table">
-                        <thead>
-                            <tr>
+<!--  -->
+
+        <t groups="sale.group_sale_layout" t-foreach="o.order_lines_layouted()" t-as="page" name="lines_layouted">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
                                 <th>Code</th>
 	                            <th>Adresse</th>
 	                            <th>L</th>
@@ -66,10 +69,22 @@
 	                            <th class="text-center">Au</th>
                                 <th class="text-right">P.U. HT</th>
                                 <th class="text-right">Total HT</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <t t-foreach="page" t-as="layout_category">
+
+                        <t t-if="layout_category_size > 1 or page_size > 1" groups="sale.group_sale_layout">
+                            <tr class="active">
+                                <td colspan="12" style="font-weight: bold; border-bottom: 1px solid black;">&amp;bull;
+                                    <t t-esc="layout_category['name']"/>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody class="invoice_tbody">
-                            <tr t-foreach="o.invoice_line_ids" t-as="l">
+                        </t>
+
+                        <!-- Lines associated -->
+                        <t t-foreach="layout_category['lines']" t-as="l">
+                            <tr>
                                 <td><span t-field="l.name"/></td>
                                 <td><span t-field="l.adresse"/></td>
                                 <td><span t-field="l.largeur"/></td>
@@ -86,51 +101,45 @@
                                         t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                 </td>
                             </tr>
-                            <tr t-foreach="range(max(5-len(o.invoice_line_ids),0))" t-as="l">
-                                <td>&amp;nbsp;</td>
-                                <td class="hidden"></td>
-                                <td></td>
-                                <td></td>
-                                <td t-if="display_discount"></td>
-                                <td></td>
-                                <td></td>
+                        </t>
+
+                        <t t-if="(layout_category_size > 1 or page_size > 1) and layout_category['subtotal']" groups="sale.group_sale_layout">
+                            <tr class="text-right">
+                                <td colspan="14">
+                                    <strong>Subtotal: </strong>
+                                    <t t-set="subtotal" t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
+                                    <span t-esc="subtotal" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
                             </tr>
-                        </tbody>
-                    </table>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+
+            <t t-if="page_index &lt; page_size - 1" groups="sale.group_sale_layout">
+                <p style="page-break-before:always;"> </p>
+            </t>
+        </t>
 
                     <div class="clearfix">
-                        <div id="total" class="row">
-                            <div class="col-xs-4 pull-right">
-                                <table class="table table-condensed" style="min-width: 250px;max-width: 400px;">
-                                    <tr class="border-black" style="border-bottom:1px solid #dddddd;">
-                                        <td><strong>Subtotal</strong></td>
+	                <div class="row" name="total">
+	                    <div class="col-xs-6 pull-right">
+	                        <table class="table table-condensed">
+	                            <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                        <td><strong>Sous Total H.T.</strong></td>
                                         <td class="text-right">
                                             <span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
-                                    <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
-                                        <tr style="border-bottom:1px solid #dddddd;">
-                                            <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
-                                                <td><span t-esc="amount_by_group[0]"/></td>
-                                                <td class="text-right">
-                                                    <span t-esc="amount_by_group[3]"/>
-                                                </td>
-                                            </t>
-                                            <t t-else="">
-                                                <td>
-                                                    <span t-esc="amount_by_group[0]"/>
-                                                    <span>&amp;nbsp;<span>on</span>
-                                                        <t t-esc="amount_by_group[4]"/>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right">
-                                                    <span t-esc="amount_by_group[3]" />
-                                                </td>
-                                            </t>
-                                        </tr>
-                                    </t>
+                                    <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                        <td><strong>T.V.A. 20%</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+
                                     <tr class="border-black">
-                                        <td><strong>Total</strong></td>
+                                        <td><strong>Total T.T.C.</strong></td>
                                         <td class="text-right">
                                             <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
@@ -139,6 +148,30 @@
                             </div>
                         </div>
                     </div>
+                    <!-- modalités paiement -->
+                    
+                    <t t-if="o.modalites">
+                       <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Mode de paiement</th>
+                                    <th>%</th>
+                                    <th>Montant</th>
+                                    <th>Échéance</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <tr t-foreach="o.modalites" t-as="m">
+                                    <td><span t-field="m.mode_id"/></td>
+                                    <td><span t-field="m.percent"/></td>
+                                    <td><span t-field="m.amount"/></td>
+                                    <td><span t-field="m.echeance"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+					</t>
+					
                     <p t-if="o.comment">
                         <span t-field="o.comment"/>
                     </p>
@@ -150,7 +183,7 @@
                     </p>
                 </div>
             </t>
-            </t>
+          </t>      
         </template>
     </data>
 </odoo>
