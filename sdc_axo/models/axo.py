@@ -237,7 +237,7 @@ class SaleOrderLine(models.Model):
             'adresse':self.adresse,
             'du':self.du,
             'au':self.au,
-            'periode':self.periode,
+            'periode':self.order_id.periode,
             'comm_agence':self.product_uom_qty,
             'discount': self.discount,
             'uom_id': self.product_uom.id,
