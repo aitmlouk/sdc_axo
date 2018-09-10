@@ -24,12 +24,12 @@
 					     <td ><strong>Societé : </strong><span t-field="o.partner_id"/></td>
 					 </tr>
 					  <tr>
-					  <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="o.date_invoice" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
+					  <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="o.date_invoice" t-field-options='{"format": "dd/MM/yyyy"}'/></td>
 					  	<td ></td>
-					  	<td ><strong>Adresse : </strong><span t-field="o.partner_id.street"/></td>
+					  	<td ><strong>Adresse : </strong><span t-field="o.partner_id.street"/> <span t-field="o.partner_id.zip"/>, <span t-field="o.partner_id.city"/></td>
 					 </tr>
 					  <tr>
-					  	<td ><strong>Code de client : </strong><span t-field="o.partner_id.property_account_receivable_id.code"/></td>
+					  	<td ><strong>Code du client : </strong><span t-field="o.partner_id.property_account_receivable_id.code"/></td>
 					  	<td ></td>
 					  	<td ><strong>ICE N°: </strong><span t-field="o.partner_id.ice"/></td>
 					  </tr>
@@ -49,7 +49,7 @@
 					  	<td ></td>
 					  </tr>
 					  <tr>
-					  	<td><strong>Annonceur - Campagne : </strong><span t-field="o.compagne"/> + <span t-field="o.annance"/></td>
+					  	<td><strong>Annonceur - Campagne : </strong><span t-field="o.annance"/> - <span t-field="o.compagne"/></td>
 						  <td ></td>
 						  <td ></td>
 					  </tr>

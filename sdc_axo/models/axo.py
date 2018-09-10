@@ -387,13 +387,12 @@ class Modalites(models.Model):
     mode_id = fields.Many2one('payment.mode', string= 'Mode de règlement')
     percent = fields.Integer(string='%')
     echeance = fields.Date(string='échéance')
-    amount = fields.Float(string='Montant')
+    amount = fields.Float(compute='_compute_amount', string='Montant')
     invoice_id = fields.Many2one('account.invoice',string='échéance')
- 
-    @api.onchange('percent','invoice_id.amount_total')
+    
+    @api.one
+    @api.depends('percent','invoice_id.amount_total')
     def _compute_amount(self):
         if self.percent:
             self.amount = (self.percent/100) * self.invoice_id.amount_total or False
             
-               
-        
