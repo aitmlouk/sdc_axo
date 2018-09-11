@@ -173,8 +173,7 @@
 		    		<xpath expr="//field[@name='team_id']" position="after">
 		            	<field name="modalite_id"/>
 		            	<field name="periode"/>
-		            </xpath>
-		            
+		            </xpath>		            
 		            <xpath expr="//field[@name='payment_term_id']" position="after">
 		            	<field name="num_offer"/>
 		            	<field name="compagne"/>

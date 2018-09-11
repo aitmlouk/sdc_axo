@@ -12,7 +12,6 @@
 								    border: none;
 								}
 					        </style>
-					
 					<div class="col-xs-6 pull-right">
 	        			<strong><h3>Facture</h3></strong>
 	        		</div>
@@ -171,7 +170,7 @@
                                 <tr>
                                     <th>Mode de paiement</th>
                                     <th>%</th>
-                                    <th>Montant</th>
+                                    <th class="text-right">Montant</th>
                                     <th>Échéance</th>
                                 </tr>
                             </thead>
@@ -180,7 +179,7 @@
                                 <tr t-foreach="o.modalites" t-as="m">
                                     <td><span t-field="m.mode_id"/></td>
                                     <td><span t-field="m.percent"/></td>
-                                    <td><span t-field="m.amount"/></td>
+                                    <td class="text-right"><span t-field="m.amount"/></td>
                                     <td><span t-field="m.echeance"/></td>
                                 </tr>
                             </tbody>
