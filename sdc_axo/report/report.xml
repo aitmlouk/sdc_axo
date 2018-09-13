@@ -30,15 +30,45 @@
             attachment_use="False"
             print_report_name="'Offre de réimpression sans comm. ag. - %s' %(object.name)"
         />
-        
+
+        <report 
+            id="report_sale_order_axo_pro"
+            model="sale.order"
+            string="Facture pro forma Affichage"
+            report_type="qweb-pdf"
+            name="sdc_axo.report_template_sale_order_print_pro"
+            file="sdc_axo.report_template_sale_order_print_pro"
+            attachment_use="False"
+            print_report_name="'Facture pro forma Affichage - %s' %(object.name)"
+        />
+        <report 
+            id="report_sale_order_print_axo_pro"
+            model="sale.order"
+            string="Facture pro forma Réimpression"
+            report_type="qweb-pdf"
+            name="sdc_axo.report_template_sale_order_print_pro"
+            file="sdc_axo.report_template_sale_order_print_pro"
+            attachment_use="False"
+            print_report_name="'Facture pro forma Réimpression - %s' %(object.name)"
+        />        
         <report 
             id="report_invoice_axo"
             model="account.invoice"
-            string="Facture Axo"
+            string="Facture Affichage"
             report_type="qweb-pdf"
             name="sdc_axo.report_template_invoice_axo"
             file="sdc_axo.report_template_invoice_axo"
             attachment_use="False"
             print_report_name="'Facture - %s' %(object.name)"
+        />
+         <report 
+            id="report_invoice_axo_print"
+            model="account.invoice"
+            string="Facture Réimpression"
+            report_type="qweb-pdf"
+            name="sdc_axo.report_template_invoice_axo_print"
+            file="sdc_axo.report_template_invoice_axo_print"
+            attachment_use="False"
+            print_report_name="'Reimpression - %s' %(object.name)"
         />
 </odoo>
