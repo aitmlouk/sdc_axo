@@ -180,7 +180,12 @@
                             </tbody>
                         </table>
 					</t>
-					
+
+					<p>
+			                <strong>ARRETEE LA PRESENTE FACTURE A LA SOMME DE:</strong>
+			                <span t-field="o.amount_to_text"/>
+			        </p>
+			        				
                     <p t-if="o.comment">
                         <span t-field="o.comment"/>
                     </p>
