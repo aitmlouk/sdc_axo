@@ -21,8 +21,8 @@ def _convert_nn_fr(val):
         if dval + 10 > val:
             if val % 10:
                 if dval == 70 or dval == 90:
-                    #True
-                    return tens_fr[dval/(10 - 3)] + '-' + to_19_fr[val%(10 + 10)]
+                    True
+                    #return tens_fr[dval/(10 - 3)] + '-' + to_19_fr[val%(10 + 10)]
                 else:
                     return dcap + '-' + to_19_fr[val % 10]
             return dcap
