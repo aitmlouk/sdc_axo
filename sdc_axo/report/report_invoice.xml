@@ -163,9 +163,9 @@
                         </div>
                     </div>
                     <p>
-			                <strong>ARRETEE LA PRESENTE FACTURE A LA SOMME DE:</strong>
+			                La présente facture est arrêtée à la somme de 
 			                <span t-field="o.amount_to_text"/>
-			       </p>
+			        </p>
                     <!-- modalités paiement -->
                     <t t-if="o.modalites">
                        <table class="table table-condensed">

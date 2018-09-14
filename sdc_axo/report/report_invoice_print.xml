@@ -49,18 +49,11 @@
 					  </tr>
 					  <tr>
 					  	<td><strong>Annonceur - Campagne : </strong><span t-field="o.annance"/> - <span t-field="o.compagne"/></td>
-						  <td ></td>
-						  <td ></td>
 					  </tr>
 					  <tr>
 					  	<td ><strong>Période d'affichage : </strong><span t-field="o.periode"/></td>
 					  	<td ></td>
 					  	<td ></td>
-					  </tr>
-					  <tr>
-					  	<td><strong>Modalité de paiement : </strong><span t-field="o.modalite_id"/></td>
-					  <td ></td>
-					  <td ></td>
 					  </tr>
 					</table>
 				</div>
@@ -159,7 +152,7 @@
                     </div>
                     
                     <p>
-			                <strong>ARRETEE LA PRESENTE FACTURE A LA SOMME DE:</strong>
+			                La présente facture est arrêtée à la somme de 
 			                <span t-field="o.amount_to_text"/>
 			        </p>
                     <!-- modalités paiement -->

@@ -5,10 +5,10 @@ from odoo import api, fields, models, _
 to_19_fr = ('zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six',
           'sept', 'huit', 'neuf', 'dix', 'onze', 'douze', 'treize',
           'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf')
-tens_fr = ('vingt', 'trente', 'quarante', 'Cinquante', 'Soixante', 'Soixante-dix', 'Quatre-vingts', 'Quatre-vingt Dix')
+tens_fr = ('vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'soixante-dix', 'quatre-vingts', 'quatre-vingt dix')
 denom_fr = ('',
-          'Mille', 'Millions', 'Milliards', 'Billions', 'Quadrillions',
-          'Quintillion', 'Sextillion', 'Septillion', 'Octillion', 'Nonillion',
+          'mille', 'millions', 'milliards', 'billions', 'quadrillions',
+          'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion',
           'Décillion', 'Undecillion', 'Duodecillion', 'Tredecillion', 'Quattuordecillion',
           'Sexdecillion', 'Septendecillion', 'Octodecillion', 'Icosillion', 'Vigintillion')
 
@@ -38,9 +38,9 @@ def _convert_nnn_fr(val):
     (mod, rem) = (val % 100, val // 100)
     if rem > 0:
         if rem == 1:
-            word = 'Cent'
+            word = 'cent'
         else:
-            word = to_19_fr[rem] + ' Cent'
+            word = to_19_fr[rem] + ' cent'
         if mod > 0:
             word += ' '
     if mod > 0:
@@ -62,7 +62,7 @@ def french_number(val):
             else:
                 ret = _convert_nnn_fr(l) + ' ' + denom_fr[didx]
             if r > 0:
-                ret = ret + ', ' + french_number(r)
+                ret = ret + ' ' + french_number(r)
             return ret
 
 def amount_to_text_fr(numbers, currency):
@@ -72,7 +72,7 @@ def amount_to_text_fr(numbers, currency):
     start_word = french_number(abs(int(liste[0])))
     end_word = french_number(int(liste[1]))
     cents_number = int(liste[1])
-    cents_name = (cents_number > 1) and ' Centimes' or ' Centime'
+    cents_name = (cents_number > 1) and ' centimes' or ' centime'
     final_result = start_word + ' ' + units_name + ' ' + end_word + ' ' + cents_name
     return final_result
 
