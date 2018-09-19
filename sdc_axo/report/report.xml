@@ -36,8 +36,8 @@
             model="sale.order"
             string="Facture pro forma Affichage"
             report_type="qweb-pdf"
-            name="sdc_axo.report_template_sale_order_print_pro"
-            file="sdc_axo.report_template_sale_order_print_pro"
+            name="sdc_axo.report_template_sale_order_pro"
+            file="sdc_axo.report_template_sale_order_pro"
             attachment_use="False"
             print_report_name="'Facture pro forma Affichage - %s' %(object.name)"
         />

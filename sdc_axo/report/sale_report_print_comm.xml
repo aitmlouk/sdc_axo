@@ -20,7 +20,7 @@
 				  <tr>
 				    <td ><strong>Contact : </strong></td>
 				    <td ></td>
-				    <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "yyyy/dd/MM"}'/></td>
+				    <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "dd/MM/yyyy"}'/></td>
 				 </tr>
 				  <tr>
 				  	<td ><strong>A l'anttention de : </strong><span t-field="doc.partner_id"/></td>

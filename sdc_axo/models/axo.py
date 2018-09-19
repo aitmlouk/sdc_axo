@@ -82,7 +82,7 @@ class SaleOrder(models.Model):
             for line in self.order_line:
                     print('reimpression----------------------')
                     price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-                    product_uom_qty =line.area * (1+(line.product_uom_qty/100))
+                    product_uom_qty =line.area * (1+(line.comm_agence/100))
                     taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
                     line.update({
                         'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
@@ -92,7 +92,7 @@ class SaleOrder(models.Model):
         else:
             for line in self.order_line:     
                     price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-                    product_uom_qty =(1+(line.product_uom_qty/100))
+                    product_uom_qty =(1+(line.comm_agence/100))
                     taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
                     line.update({
                         'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
@@ -151,7 +151,8 @@ class SaleOrder(models.Model):
             'team_id': self.team_id.id
         }
         return invoice_vals
-     
+ 
+    
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'   
             
@@ -178,7 +179,7 @@ class SaleOrderLine(models.Model):
             if line.order_id.refrence_id =='print':
                 print('reimpression----------------------')
                 price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-                product_uom_qty =line.area * (1+(line.product_uom_qty/100))
+                product_uom_qty =line.area * (1+(line.comm_agence/100))
                 taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
                 line.update({
                     'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
@@ -188,7 +189,7 @@ class SaleOrderLine(models.Model):
             else:
                 
                 price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-                product_uom_qty =(1+(line.product_uom_qty/100))
+                product_uom_qty =(1+(line.comm_agence/100))
                 taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
                 line.update({
                     'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
@@ -205,7 +206,8 @@ class SaleOrderLine(models.Model):
     area = fields.Float(string='Surface')  
     dimension = fields.Char(string='Dimension')
     vailable = fields.Date(string='Disponibilité')
-    product_uom_qty = fields.Integer(string='Comm. Agence %', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0)
+    comm_agence = fields.Integer(string='Comm.Agence')
+    #product_uom_qty = fields.Integer(string='Comm. Agence %', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0)
 
     @api.multi
     def _prepare_invoice_line(self, qty):
@@ -238,7 +240,7 @@ class SaleOrderLine(models.Model):
             'adresse':self.adresse,
             'du':self.du,
             'au':self.au,
-            'comm_agence':self.product_uom_qty,
+            'comm_agence':self.comm_agence,
             'discount': self.discount,
             'uom_id': self.product_uom.id,
             'product_id': self.product_id.id or False,

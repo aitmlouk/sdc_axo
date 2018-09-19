@@ -119,12 +119,26 @@
 		           	<xpath expr="//field[@name='order_line']/form//field[@name='name']" position="replace">
 		                <field name="name" required="0" invisible="1"/>
 		            </xpath>
-		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="replace">
+		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="attributes">
+		               <attribute name="invisible">1</attribute>
+		            </xpath>
+		    		<xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']" position="attributes">
+		               <attribute name="invisible">1</attribute>
+		            </xpath>        
+		            
+		           <!--  <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="replace">
 		                <field name="product_uom_qty" string="Comm. Agence"/>
 		            </xpath>
 		            <xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']" position="replace">
 		                <field name="product_uom_qty" string="Comm. Agence"/>
+		            </xpath>-->
+		             <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="before">
+		                <field name="comm_agence" string="Comm.. Agence"/>
 		            </xpath>
+		            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="before">
+		                <field name="comm_agence" string="Comm.. Agence"/>
+		            </xpath>
+		            
 		            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="replace">
 		                <field name="product_id" string="Code"/>
 		            </xpath>

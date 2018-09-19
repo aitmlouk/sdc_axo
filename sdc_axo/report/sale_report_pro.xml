@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<template id="report_template_sale_order_print_pro">
+<template id="report_template_sale_order_pro">
     <t t-call="web.external_layout">
         <t t-foreach="docs" t-as="doc">
         <div class="page">
