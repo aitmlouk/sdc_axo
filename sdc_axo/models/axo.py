@@ -328,17 +328,17 @@ class AccountInvoiceLine(models.Model):
     comm_agence = fields.Integer(string='Comm.Agence')
     price_subtotal = fields.Monetary(string='Amount',
         store=True, readonly=True, compute='_compute_subt', help="Total amount without taxes")
-                
+    
+    price_unit_axo = fields.Monetary(string='PU HT',
+        store=True, readonly=True, compute='_compute_punit_axo', help="Price unit")                
 
     @api.one
     @api.depends('comm_agence','price_unit')
-    def _compute_subt(self):
+    def _compute_punit_axo(self):
         if self.invoice_id.refrence_id=='print':  
-            product_uom_qty =self.area * (1+(self.comm_agence/100))
-            self.price_subtotal = product_uom_qty * self.price_unit or False
-        else:
             product_uom_qty =(1+(self.comm_agence/100))
-            self.price_subtotal = product_uom_qty * self.price_unit or False
+            self.price_unit_axo = product_uom_qty * self.price_unit or False
+        
 
 
     @api.onchange('product_id')
@@ -354,7 +354,7 @@ class AccountInvoiceLine(models.Model):
         if self.largeur and self.hauteur:
             self.area = self.largeur * self.hauteur or False
 
-    @api.one
+    """@api.one
     @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'quantity',
         'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
         'invoice_id.date_invoice')
@@ -369,8 +369,20 @@ class AccountInvoiceLine(models.Model):
         if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
             price_subtotal_signed = self.invoice_id.currency_id.with_context(date=self.invoice_id.date_invoice).compute(price_subtotal_signed, self.invoice_id.company_id.currency_id)
         sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1
-        self.price_subtotal_signed = price_subtotal_signed * sign
-                                                    
+        self.price_subtotal_signed = price_subtotal_signed * sign"""
+
+    @api.one
+    @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'comm_agence',
+        'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
+        'invoice_id.date_invoice')
+    def _compute_subt(self):
+        if self.invoice_id.refrence_id=='print':  
+            product_uom_qty =self.area * (1+(self.comm_agence/100))
+            self.price_subtotal = product_uom_qty * self.price_unit or False
+        else:
+            product_uom_qty =(1+(self.comm_agence/100))
+            self.price_subtotal = product_uom_qty * self.price_unit or False
+                                                                
 class ModalitePai(models.Model):
     _name = 'modalite.modalite' 
 

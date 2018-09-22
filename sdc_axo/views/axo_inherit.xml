@@ -206,10 +206,17 @@
 		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='name']" position="replace">
 		                <field name="name" required="0" invisible="1"/>
 		            </xpath>
-
+		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='price_unit']" position="after">
+		                <field name="price_unit_axo" invisible="1"/>
+		            </xpath>
+		            
+		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='account_id']" position="attributes">
+		               <attribute name="invisible">1</attribute>
+		            </xpath>
 		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="attributes">
 		               <attribute name="invisible">1</attribute>
 		            </xpath>
+		            
 		            <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="after">
 		                <field name="comm_agence" string="Comm. Agence"/>
 		            </xpath>

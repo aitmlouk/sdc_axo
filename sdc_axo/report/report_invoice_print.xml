@@ -96,7 +96,12 @@
                                 <td><span t-field="l.hauteur"/></td>
                                 <td><span t-field="l.area"/></td>
                                 <td class="text-right">
-                                    <span t-field="l.price_unit"/>
+	                                <t t-if="l.invoice_id.refrence_id == 'print'">
+									     <span t-field="l.price_unit_axo"/>
+									</t>
+                                  	<t t-if="not l.invoice_id.refrence_id == 'print'">
+								    	<span t-field="l.price_unit"/>
+									</t> 
                                 </td>
                                 <td class="text-right" id="subtotal">
                                     <span t-field="l.price_subtotal"
