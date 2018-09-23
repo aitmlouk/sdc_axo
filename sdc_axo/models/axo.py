@@ -208,7 +208,17 @@ class SaleOrderLine(models.Model):
     vailable = fields.Date(string='Disponibilité')
     comm_agence = fields.Integer(string='Comm.Agence')
     #product_uom_qty = fields.Integer(string='Comm. Agence %', digits=dp.get_precision('Product Unit of Measure'), required=True, default=0)
+    price_unit_axo = fields.Monetary(string='PU HT',
+        store=True, readonly=True, compute='_compute_punit_axo', help="Price unit")                
 
+    @api.one
+    @api.depends('comm_agence','price_unit')
+    def _compute_punit_axo(self):
+        if self.order_id.refrence_id=='print':  
+            product_uom_qty =(1+(self.comm_agence/100))
+            self.price_unit_axo = product_uom_qty * self.price_unit or False
+            
+            
     @api.multi
     def _prepare_invoice_line(self, qty):
         """
@@ -362,11 +372,18 @@ class AccountInvoiceLine(models.Model):
         currency = self.invoice_id and self.invoice_id.currency_id or None
         price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
         product_uom_qty =(1+(self.comm_agence/100))
+        product_uom_qty1 =self.area * (1+(self.comm_agence/100))
         taxes = False
-        if self.invoice_line_tax_ids:
-            taxes = self.invoice_line_tax_ids.compute_all(price, currency, product_uom_qty, product=self.product_id, partner=self.invoice_id.partner_id)
-        self.price_subtotal = price_subtotal_signed =  product_uom_qty * price
-        self.price_total = taxes['total_included'] if taxes else self.price_subtotal
+        if self.invoice_id.refrence_id=='print':  
+            if self.invoice_line_tax_ids:
+                taxes = self.invoice_line_tax_ids.compute_all(price, currency, product_uom_qty1, product=self.product_id, partner=self.invoice_id.partner_id)
+            self.price_subtotal = price_subtotal_signed =  product_uom_qty1 * price
+            self.price_total = taxes['total_included'] if taxes else self.price_subtotal
+        else:
+            if self.invoice_line_tax_ids:
+                taxes = self.invoice_line_tax_ids.compute_all(price, currency, product_uom_qty, product=self.product_id, partner=self.invoice_id.partner_id)
+            self.price_subtotal = price_subtotal_signed =  product_uom_qty * price
+            self.price_total = taxes['total_included'] if taxes else self.price_subtotal
         if self.invoice_id.currency_id and self.invoice_id.currency_id != self.invoice_id.company_id.currency_id:
             price_subtotal_signed = self.invoice_id.currency_id.with_context(date=self.invoice_id.date_invoice).compute(price_subtotal_signed, self.invoice_id.company_id.currency_id)
         sign = self.invoice_id.type in ['in_refund', 'out_refund'] and -1 or 1

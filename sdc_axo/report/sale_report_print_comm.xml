@@ -57,7 +57,7 @@
                             <th>L</th>
                             <th>H</th>
                             <th>Surf</th>
-                            <th class="text-center">Prix unitaire</th>
+                            <th class="text-right">Prix unitaire</th>
                             <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
                             <th class="text-right" groups="sale.group_show_price_subtotal">Total HT</th>
                             <th class="text-center price_tax_included" groups="sale.group_show_price_total">PU HT Comm</th>
@@ -83,7 +83,12 @@
                                     <td><span t-field="l.hauteur"/></td>
                                     <td><span t-field="l.area"/></td>
                                     <td class="text-right">
-                                        <span t-field="l.price_unit"/>
+	                                    <t t-if="l.order_id.refrence_id == 'print'">
+										     <span t-field="l.price_unit_axo"/>
+										</t>
+	                                  	<t t-if="not l.order_id.refrence_id == 'print'">
+									    	<span t-field="l.price_unit"/>
+										</t> 
                                     </td>
 
                                     <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
