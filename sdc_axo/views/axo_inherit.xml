@@ -146,7 +146,7 @@
 		                <field name="product_id" string="Code"/>
 		            </xpath>
 		            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
-		                <field name="price_unit_axo" invisible="0"/>
+		                <field name="price_unit_axo" invisible="1"/>
 		            </xpath>
 		            
 		            <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="replace">
