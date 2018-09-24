@@ -18,24 +18,19 @@
         		
 				<table class="table borderless">
 				  <tr>
-				    <td ><strong>Contact : </strong></td>
+				    <td ><strong>A l'anttention de : </strong><span t-field="doc.partner_id"/></td>
 				    <td ></td>
 				    <td class="col-xs-6 pull-right"><strong>Date : </strong><span t-field="doc.date_order" t-field-options='{"format": "dd/MM/yyyy"}'/></td>
 				 </tr>
 				  <tr>
-				  	<td ><strong>A l'anttention de : </strong><span t-field="doc.partner_id"/></td>
+				  	<td ><strong>Offre N° : </strong><span t-field="doc.name"/></td>
 				  	<td ></td>
 				    <td ><strong>N° de client : </strong><span t-field="doc.partner_id.property_account_receivable_id.code"/></td>
 				 </tr>
 				  <tr>
-				  	<td ><strong>Offre N° : </strong><span t-field="doc.name"/></td>
-				  	<td ></td>
-				  	<td >Devis valide jusqu'au : <span t-field="doc.validity_date"/></td>
-				  </tr>
-				  <tr>
 				  	<td >Campagne : <span t-field="doc.compagne"/></td>
 				  	<td ></td>
-				  	<td></td>
+				  	<td >Devis valide jusqu'au : <span t-field="doc.validity_date"/></td>
 				  </tr>
 				</table>
 			</div>
