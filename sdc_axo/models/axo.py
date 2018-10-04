@@ -1,7 +1,7 @@
 from odoo import models, fields, api,_
 from odoo.exceptions import UserError, AccessError, ValidationError
 from odoo.addons import decimal_precision as dp
-
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare
     
 class ResCompany(models.Model):
     _inherit = 'res.company' 
@@ -151,8 +151,44 @@ class SaleOrder(models.Model):
             'team_id': self.team_id.id
         }
         return invoice_vals
- 
+
+
+    @api.multi
+    def _action_confirm(self):
+        super(SaleOrder, self)._action_confirm()
+
+        for fr in self.order_line:
+            sup = fr.product_id.seller_ids
+            va = {
+                'partner_id':sup.name.id,
+                'date_order':self.date_order,
+                'origin':self.name
+                
+                }
+        ord = self.env['purchase.order'].create(va)     
+        for order in self.order_line:
+            vals = {
+                'product_id':order.product_id.id,
+                'product_qty':order.area,
+                'product_uom':order.area,
+                'name':order.adresse,
+                'date_planned':self.date_order,
+                'price_unit':order.price_unit,
+                'largeur':order.largeur,
+                'hauteur':order.hauteur,
+                'order_id':ord.id
+
+                }
+            pp = self.env['purchase.order.line'].create(vals)
+   
+
+class Purshase(models.Model):
+    _inherit = 'purchase.order.line'   
     
+    largeur = fields.Float(string='Largeur') 
+    hauteur = fields.Float(string='Hauteur')    
+    
+              
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'   
             
@@ -259,9 +295,9 @@ class SaleOrderLine(models.Model):
             'account_analytic_id': self.order_id.analytic_account_id.id,
             'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
         }
-        return res
-    
-    
+        return res 
+            
+                    
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice' 
                              
