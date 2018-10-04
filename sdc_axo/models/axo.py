@@ -159,6 +159,8 @@ class SaleOrder(models.Model):
 
         for fr in self.order_line:
             sup = fr.product_id.seller_ids
+            if not sup:
+                raise UserError(_('Veuillez choidir un fournisseur pour l\article > anglet achat!'))
             va = {
                 'partner_id':sup.name.id,
                 'date_order':self.date_order,
@@ -171,7 +173,7 @@ class SaleOrder(models.Model):
                 'product_id':order.product_id.id,
                 'product_qty':order.area,
                 'product_uom':order.area,
-                'name':order.adresse,
+                'name':order.product_id.name,
                 'date_planned':self.date_order,
                 'price_unit':order.price_unit,
                 'largeur':order.largeur,
