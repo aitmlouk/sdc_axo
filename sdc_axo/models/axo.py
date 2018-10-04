@@ -172,7 +172,7 @@ class SaleOrder(models.Model):
             vals = {
                 'product_id':order.product_id.id,
                 'product_qty':order.area,
-                'product_uom':order.area,
+                'product_uom':order.product_uom.id,
                 'name':order.product_id.name,
                 'date_planned':self.date_order,
                 'price_unit':order.price_unit,
