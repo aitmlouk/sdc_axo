@@ -169,13 +169,18 @@ class SaleOrder(models.Model):
                 }
         ord = self.env['purchase.order'].create(va)
         for order in self.order_line:
+            seller = order.product_id._select_seller(
+            partner_id=sup.name,
+            quantity=False,
+            date=order.order_id.date_order and order.order_id.date_order[:10],
+            uom_id=order.product_uom)      
             vals = {
                 'product_id':order.product_id.id,
                 'product_qty':order.area,
                 'product_uom':order.product_uom.id,
                 'name':order.product_id.name,
                 'date_planned':self.date_order,
-                'price_unit':order.price_unit,
+                'price_unit':seller.price,
                 'largeur':order.largeur,
                 'hauteur':order.hauteur,
                 'adresse':order.adresse,
