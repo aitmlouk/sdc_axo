@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_template_purchase_order_print">
+    <t t-call="web.external_layout">
+        <t t-foreach="docs" t-as="doc">
+        <div class="page">
+            <div class="oe_structure"/> 
+            <div class="row">
+                <div class="col-xs-6 pull-right">
+					<table class="table table-bordered">
+					    <tbody>
+					        <tr>
+					          <th>Societé</th>
+					            <td><span t-field="doc.partner_id.parent_id"/></td>
+					        </tr>
+					        <tr>
+					          <th>Nom</th>
+					            <td><span t-field="doc.partner_id"/></td>
+					        </tr>
+					        <tr>
+					          <th>Téléphone</th>
+					            <td><span t-field="doc.partner_id.phone"/></td>
+					        </tr>
+					        <tr>
+					          <th>Fax</th>
+					            <td><span t-field="doc.partner_id.mobile"/></td>
+					        </tr>
+					        <tr>
+					          <th>Réf. Frs.</th>
+					            <td><span t-field="doc.partner_id.property_account_payable_id.code"/></td>
+					        </tr>
+					    </tbody>
+					</table>
+              </div>
+
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+      				
+			<div class="col-xs-6 pull-right">
+        			<strong><h3><b>Commande Impression</b></h3></strong>
+        		</div>        			
+			</div>
+
+			<table class="table table-bordered">
+				  <tr>
+				    <td class="col-md-2"><strong>Bon de commande : </strong></td>
+				    <td class="col-md-2"><span t-field="doc.name"/></td>
+				    <td class="col-md-2"><strong>Emetteur : </strong></td>
+					<td class="col-md-2"><span t-field="doc.user_id"/></td>				 
+				 </tr>
+				  <tr>
+				  	<td class="col-md-2"><strong>Date : </strong></td>
+				  	<td class="col-md-2"><span t-field="doc.date_order" t-field-options='{"format": "dd/MM/yyyy"}'/></td>
+				    <td class="col-md-2"><strong>Fonction : </strong></td>
+				    <td class="col-md-2"><span t-field="doc.user_id.partner_id.function"/></td>
+				 </tr>
+			</table>           
+
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th><strong>Espace</strong></th>
+                        <th><strong>Adresse</strong></th>
+                        <th class="text-center"><strong>L</strong></th>
+                        <th class="text-center"><strong>H</strong></th>
+                        <th class="text-center"><strong>Surface</strong></th>
+                        <th class="text-right"><strong>PU / HT</strong></th>
+                        <th class="text-right"><strong>PT / HT</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="doc.order_line" t-as="line">
+                        <td>
+                            <span t-field="line.product_id"/>
+                        </td>
+                        <td>
+                            <span t-field="line.adresse"/>
+                        </td>
+                        <td class="text-center">
+                            <span t-field="line.largeur"/>
+                        </td>
+                        <td class="text-center">
+                            <span t-field="line.hauteur"/>
+                        </td>
+                        <td class="text-center">
+                            <span t-field="line.product_qty"/>
+                        </td>
+                        
+                        <td class="text-right">
+                            <span t-field="line.price_unit"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="line.price_subtotal"
+                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-xs-4 pull-right">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td><strong>TOTAL HT</strong></td>
+                            <td class="text-right">
+                                <span t-field="doc.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>TVA 20%</td>
+                            <td class="text-right">
+                                <span t-field="doc.amount_tax"
+                                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr class="border-black table-active" >
+                            <td><strong>TOTAL TTC</strong></td>
+                            <td class="text-right">
+                                <span t-field="doc.amount_total"
+                                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+			<div class="row">
+            <div class="col-xs-6 pull-left">
+					<table class="table table-bordered">
+					    <tbody>
+					        <tr>
+					          <th style="width: 50%">Modalité de paiement :</th>
+					            <td> Chèque </td>
+					        </tr>
+					        <tr>
+					          <th style="width: 50%">Date de livraison :</th>
+					            <td> <span t-field="doc.date_planned"></span> </td>
+					        </tr>
+					        <tr>
+					          <th style="width: 50%">Période de livraison :</th>
+					            <td><span t-field="doc.plage_h"></span> </td>
+					        </tr>
+					    </tbody>
+					</table>
+              </div>
+              
+              <div class="col-xs-6 pull-right">
+					<table class="table table-bordered">
+					    <tbody>
+					        <tr>
+					          <th class="text-center">Signature et cachet</th>
+					        </tr>
+					        <tr>
+					          <th class="text-center">
+					           <br></br>
+					           <br></br>
+					           <br></br>
+					           </th>
+					        </tr>
+					    </tbody>
+					</table>
+              </div>
+			
+			
+			<br></br>
+			<br></br>
+			
+              <div>
+                <table class="table table-bordered">
+				    <thead>
+				      <tr>
+				        <th class="text-center">Observation</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr>
+				        <td>
+							<p><center>Prière de respecter les mesures mentionnées sur le Bon de commande</center></p>
+					         <center>Toute facture envoyée aprés exécution selon nos ordres qui ne sera pas en notre possession dans les 60 jours ne sera pas payée					
+							</center>
+						</td>
+				      </tr>
+				    </tbody>
+				  </table>
+              </div>
+             </div>
+            <div class="oe_structure"/>
+ </div>
+ </t>
+    </t>
+</template>
+</odoo>

@@ -167,7 +167,7 @@ class SaleOrder(models.Model):
                 'origin':self.name
                 
                 }
-        ord = self.env['purchase.order'].create(va)     
+        ord = self.env['purchase.order'].create(va)
         for order in self.order_line:
             vals = {
                 'product_id':order.product_id.id,
@@ -178,19 +178,25 @@ class SaleOrder(models.Model):
                 'price_unit':order.price_unit,
                 'largeur':order.largeur,
                 'hauteur':order.hauteur,
-                'order_id':ord.id
-
+                'adresse':order.adresse,
+                'order_id':ord.id,
+                'taxes_id':[(6, 0, order.tax_id.ids)]
                 }
-            pp = self.env['purchase.order.line'].create(vals)
-   
+            self.env['purchase.order.line'].create(vals)
 
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"   
+    plage_h = fields.Char(string='Plage horaire')
+    user_id = fields.Many2one('res.users',string='Emetteur',default=lambda self: self._uid)
+    
 class Purshase(models.Model):
     _inherit = 'purchase.order.line'   
     
-    largeur = fields.Float(string='Largeur') 
-    hauteur = fields.Float(string='Hauteur')    
-    
-              
+    largeur = fields.Float(string='Largeur')
+    hauteur = fields.Float(string='Hauteur')
+    adresse = fields.Char(string='Adresse')   
+       
+                  
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'   
             
