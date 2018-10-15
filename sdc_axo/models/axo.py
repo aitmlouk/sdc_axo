@@ -26,12 +26,20 @@ class ResCompanyType(models.Model):
 class Partner(models.Model):
     _inherit = 'res.partner' 
     
-    rc = fields.Char(string='N°RC')
+    rc = fields.Char(string='Registre du commerce')
     patente = fields.Char(string='Patente')
     ifs = fields.Char(string='Identifiant Fiscal')
-    cnss = fields.Char(string='CNSS')
+    cnss = fields.Char(string='C.N.S.S.')
     ice = fields.Char(string='I.C.E')
-        
+    activite_id = fields.Many2one('partner.activity',string='Activités')
+    supplier_account = fields.Char(string='Ancien compte fournisseur')
+
+class PartnerActivity(models.Model):
+    _name = 'partner.activity' 
+    
+    name = fields.Char(string='Nom')
+    code = fields.Char(string='Code')
+            
 class ProductTemplate(models.Model):
     _inherit = 'product.template' 
 
@@ -81,7 +89,7 @@ class SaleOrder(models.Model):
         if self.refrence_id =='print':
             for line in self.order_line:
                     print('reimpression----------------------')
-                    price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+                    price = line.price_unit
                     product_uom_qty =line.area * (1+(line.comm_agence/100))
                     taxes = line.tax_id.compute_all(price, line.order_id.currency_id, product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
                     line.update({
